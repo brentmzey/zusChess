@@ -3,13 +3,6 @@ package com.zus.pieces
 import com.zus.actions.Direction
 import kotlin.math.abs
 
-data class Position(val file: Char,
-                    val rank: Int) {
-    override fun toString(): String {
-        return "$file$rank"
-    }
-}
-
 sealed class Piece(var position: Position) {
     abstract fun canCapture(opponent: Piece): Boolean
 }
