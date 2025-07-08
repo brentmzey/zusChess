@@ -23,3 +23,11 @@ tasks.test {
 application {
     mainClass.set("com.zus.MainKt")
 }
+
+tasks.named<Jar>("jar") {
+    manifest {
+        attributes["Main-Class"] = application.mainClass.get()
+    }
+    from(configurations.runtimeClasspath.get().map { if (it.isDirectory) it else zipTree(it) })
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
