@@ -1,5 +1,6 @@
 package com.zus.pieces
 
+import com.zus.actions.Direction
 import kotlin.math.abs
 
 data class Position(val file: Char,
@@ -19,6 +20,14 @@ class Bishop(position: Position) : Piece(position) {
         val rankDistance = abs(position.rank - opponent.position.rank)
         return fileDistance == rankDistance && fileDistance != 0
     }
+
+    fun move(fileDirection: Int,
+             rankDirection: Int,
+             steps: Int) {
+        val newFile = 'a' + ((position.file - 'a' + fileDirection * steps + 8) % 8)
+        val newRank = ((position.rank - 1 + rankDirection * steps + 8) % 8) + 1
+        position = Position(newFile, newRank)
+    }
 }
 
 class Rook(position: Position) : Piece(position) {
@@ -28,17 +37,26 @@ class Rook(position: Position) : Piece(position) {
         return (sameFile || sameRank) && !(sameFile && sameRank)
     }
 
-    fun move(direction: String, steps: Int) {
+    fun move(direction: Direction,
+             steps: Int) {
         var newFile = position.file
         var newRank = position.rank
 
         when (direction) {
-            "up" -> {
+            Direction.UP -> {
                 val totalRank = (position.rank - 1 + steps) % 8
                 newRank = totalRank + 1
             }
-            "right" -> {
+            Direction.DOWN -> {
+                val totalRank = (position.rank - 1 - steps + 8 * steps) % 8
+                newRank = totalRank + 1
+            }
+            Direction.RIGHT -> {
                 val newFileIndex = ((position.file - 'a' + steps) % 8)
+                newFile = 'a' + newFileIndex
+            }
+            Direction.LEFT -> {
+                val newFileIndex = ((position.file - 'a' - steps + 8 * steps) % 8)
                 newFile = 'a' + newFileIndex
             }
         }

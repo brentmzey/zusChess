@@ -1,5 +1,6 @@
 package com.zus
 
+import com.zus.actions.Direction
 import com.zus.pieces.Bishop
 import com.zus.pieces.Position
 import com.zus.pieces.Rook
@@ -23,7 +24,7 @@ class Game {
             val dice1 = Random.nextInt(1, 7)
             val dice2 = Random.nextInt(1, 7)
             val diceSum = dice1 + dice2
-            val moveDirection = if (coinToss == "Heads") "up" else "right"
+            val moveDirection = if (coinToss == "Heads") Direction.UP else Direction.RIGHT
 
             logger.info("Round $round:")
             logger.info("  Coin Toss: $coinToss -> Move $moveDirection")
