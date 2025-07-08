@@ -3,6 +3,8 @@
 
 # User-specific stuff
 .idea
+.kotlin
+.gradle
 *.iml
 
 # Mac OSX Junk
