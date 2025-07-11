@@ -1,10 +1,12 @@
 package com.zus.pieces
 
 import com.zus.actions.Direction
+import com.zus.actions.MoveDirectives
 import kotlin.math.abs
 
 sealed class Piece(var position: Position) {
     abstract fun canCapture(opponent: Piece): Boolean
+    abstract fun move(moveDirectives: MoveDirectives, steps: Int): Unit
 }
 
 class Bishop(position: Position) : Piece(position) {
@@ -14,11 +16,13 @@ class Bishop(position: Position) : Piece(position) {
         return fileDistance == rankDistance && fileDistance != 0
     }
 
-    fun move(fileDirection: Int,
-             rankDirection: Int,
-             steps: Int) {
-        val newFile = 'a' + ((position.file - 'a' + fileDirection * steps + 8) % 8)
-        val newRank = ((position.rank - 1 + rankDirection * steps + 8) % 8) + 1
+    override fun move(moveDirectives: MoveDirectives,
+                      steps: Int) {
+        val (moveDirection, fileMoveDistance, rankMoveDistance) = moveDirectives
+        val fileDistance = fileMoveDistance ?: 0
+        val rankDistance = rankMoveDistance ?: 0
+        val newFile = 'a' + ((position.file - 'a' + fileDistance * steps + 8) % 8)
+        val newRank = ((position.rank - 1 + rankDistance * steps + 8) % 8) + 1
         position = Position(newFile, newRank)
     }
 }
@@ -30,8 +34,9 @@ class Rook(position: Position) : Piece(position) {
         return (sameFile || sameRank) && !(sameFile && sameRank)
     }
 
-    fun move(direction: Direction,
-             steps: Int) {
+    override fun move(moveDirectives: MoveDirectives,
+                      steps: Int) {
+        val (direction, _, _) = moveDirectives
         var newFile = position.file
         var newRank = position.rank
 

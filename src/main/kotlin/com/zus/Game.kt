@@ -1,6 +1,7 @@
 package com.zus
 
 import com.zus.actions.Direction
+import com.zus.actions.MoveDirectives
 import com.zus.pieces.Bishop
 import com.zus.pieces.Position
 import com.zus.pieces.Rook
@@ -30,7 +31,14 @@ class Game {
             logger.info("  Coin Toss: $coinToss -> Move $moveDirection")
             logger.info("  Dice Roll: ($dice1, $dice2) -> Move $diceSum squares")
 
-            rook.move(moveDirection, diceSum)
+            val moveDirectives = when (moveDirection) {
+                Direction.UP -> MoveDirectives(Direction.UP, 0, diceSum)
+                Direction.RIGHT -> MoveDirectives(Direction.RIGHT, diceSum, 0)
+                Direction.DOWN -> MoveDirectives(Direction.DOWN, 0, diceSum)
+                Direction.LEFT -> MoveDirectives(Direction.LEFT, diceSum, 0)
+            }
+
+            rook.move(moveDirectives, diceSum)
             logger.info("  Rook's New Position: ${rook.position}")
 
             if (board.isRookCaptured()) {
